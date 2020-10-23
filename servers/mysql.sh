@@ -83,12 +83,12 @@ if [[ "${rhel}" == "" ]]; then
   fi
 fi
 mysql_install(){
-echo <<EFO>>/opt/neoistone/mysql_password
+cat <<EFO>>/opt/neoistone/mysql_password
 ${password}
 EFO
 DB_Root_Password=`sh /opt/neoistone/mysql_password`
 if [[ "${os_type}" == "centos7" ]]; then
-echo <<EFO>>/etc/yum.repos.d/mariadb.repo
+cat <<EFO>>/etc/yum.repos.d/mariadb.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.1/${os_type}-amd64
@@ -96,7 +96,7 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EFO
  elif [[ "${os_type}" == "rhel7" ]]; then
-echo <<EFO>>/etc/yum.repos.d/mariadb.repo
+cat <<EFO>>/etc/yum.repos.d/mariadb.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
@@ -104,7 +104,7 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EFO
  elif [[ "${os_type}" == "rhel8" ]]; then
-echo <<EFO>>/etc/yum.repos.d/mariadb.repo
+cat <<EFO>>/etc/yum.repos.d/mariadb.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
@@ -112,7 +112,7 @@ gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
 gpgcheck=1
 EFO
  elif [[ "${os_type}" == "centos8" ]]; then
-echo <<EFO>>/etc/yum.repos.d/mariadb.repo
+cat <<EFO>>/etc/yum.repos.d/mariadb.repo
 [mariadb]
 name = MariaDB
 baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
