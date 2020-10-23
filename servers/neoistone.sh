@@ -12,34 +12,6 @@ if [[ -e ${dir} ]]; then
 else
     mkdir ${dir}
 fi
-echo "install packages"
-yum install -y zip 
-yum install -y unzip
-yum install -y zlib
-yum install -y zlib-devel 
-yum install -y pcre 
-yum install -y openssl-devel 
-yum install -y openssl 
-yum install -y perl 
-yum install -y cmake 
-yum install -y make 
-yum install -y curl 
-yum install -y wget 
-yum install -y apr 
-yum install -y gcc 
-yum install -y git 
-yum install -y tree 
-yum install -y gcc-c++ 
-yum install -y openssl-devel 
-yum install -y bison 
-yum install -y screen 
-yum install -y gc 
-yum install -y gcc++ 
-yum install -y gcc 
-yum install -y pecl-devel
-yum install -y pcre-devel
-yum install -y socat
-yum install -y epel-release
 echo "install neoistone"
 ./configure   --user=neoistone --group=neoistone\
               --prefix=${dir}\
