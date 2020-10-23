@@ -1,5 +1,5 @@
 runpath=`pwd`
-wget http://file.nspanel.neoistone.com/centos/servers/webserver/neoistone.tar.gz
+wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone.tar.gz
 tar xvf neoistone.tar.gz
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
