@@ -518,7 +518,7 @@ rm -rf ${cur_dir}/neoistone.tar.gz
  	yum install -y epel-release yum-utils
  	yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
  	yum-config-manager --enable remi-php ${1}
- 	yum install -y php php-mysqlnd php5-bcmath php-cli php-common php-ctype php-devel php-embedded php-enchant php-fpm php-gd php-hash php-intl php-json php-ldap php-mbstring php-mysql php-odbc php-pdo php-pecl-jsonc phpu-pecl-memcache php-pgsql php-phar php-process php-pspell php-openssl php-recode php-snmp php-soap php-xml php-xmlrpc php-zlib php-zip php-opcache php-mcrypt php-curl
+ 	yum install -y php php-mysqlnd php5-bcmath php-cli php-imagick php-common php-ctype php-devel php-embedded php-enchant php-fpm php-gd php-hash php-intl php-json php-ldap php-mbstring php-mysql php-odbc php-pdo php-pecl-jsonc phpu-pecl-memcache php-pgsql php-phar php-process php-pspell php-openssl php-recode php-snmp php-soap php-xml php-xmlrpc php-zlib php-zip php-opcache php-mcrypt php-curl
  	curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/bin --filename=composer
  	composer global require "phpunit/phpunit=4.3.*"
  	composer global require "phpunit/php-invoker"
