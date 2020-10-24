@@ -100,21 +100,14 @@ if [[ "${rhel}" == "" ]]; then
   rhel_versio=`cat /etc/redhat-release | tr -dc '0-9.'|cut -d \. -f1`
   status=`subscription-manager list | egrep -i 'Status:         Subscribed'`
   if [[ "${rhel_versio}"  == "7" ]]; then
-  	     if[ "${status}" == "Status:         Subscribed" ]; then
-             os_type="rhel${rhel_versio}"
-             os_version="${rhel_versio}"
-             os_name="rhel"
-         else
-           exit;
-  	     fi
+        os_type="rhel${rhel_versio}"
+        os_version="${rhel_versio}"
+        os_name="rhel"
   elif [[ "${rhel_versio}"  == "8" ]]; then
-           if[ "${status}" == "Status:         Subscribed" ]; then
-             os_type="rhel${rhel_versio}"
-             os_version="${rhel_versio}"
-             os_name="rhel"
-           else
-            exit;
-  	       fi
+      os_type="rhel${rhel_versio}"
+      os_version="${rhel_versio}"
+      os_name="rhel"
+           
   else
     echo "This OS Not supporte Nspanel support version are the cento7-8/rhel7-8"
     os_type="not found "
