@@ -249,7 +249,7 @@ EFO
 chmod +x /bin/neoistone
 echo "unwanted file removing"
 rm -rf /var/www/html
-mv ${dir}/html /var/www/html
+mv ${dir}/html /var/neoistone/default
 rm -rf ${dir}/html
 rm -rf ${dir}/neoistone.conf
 rm -rf ${dir}/fastcgi.conf
@@ -495,7 +495,7 @@ rm -rf ${cur_dir}/neoistone.tar.gz
  mysql_install(){
    download_file https://raw.githubusercontent.com/neoistone/lempp/main/servers/mysql.sh
    password=`passwordgen`
-   sh mysql.sh ${password} ${1}
+   sh mysql.sh ${password} ${1} ${os_type}
    rm -rf mysql.sh
  }
  require_dir(){
