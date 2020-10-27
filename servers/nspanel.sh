@@ -35,8 +35,8 @@ echo "install nspanel"
             --with-pcre \
             --without-http_scgi_module \
             --without-http_uwsgi_module \
-            --user=neoistone \
-            --group=neoistone \
+            --user=nspanel \
+            --group=nspanel \
             --builddir=nspanel-1.13.2 \
             --with-select_module \
             --with-poll_module \
