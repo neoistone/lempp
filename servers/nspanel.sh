@@ -20,31 +20,37 @@ echo "install packages"
 yum install -y zip unzip zlib zlib-devel pcre openssl-devel openssl perl cmake make curl wget apr gcc git tree gcc-c++ openssl-devel bison screen gc gcc++ nano perl-devel perl-ExtUtils-Embed libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel GeoIP GeoIP-devel
 if [[ -e /var/log/nspanel/ ]]; then
      rm -rf /var/log/nspanel/
+     mkdir /var/log/nspanel/
 else 
   mkdir /var/log/nspanel/
 fi
 if [[ -e /var/cache/nspanel/client_temp ]]; then
      rm -rf /var/cache/nspanel/client_temp
+     mkdir /var/cache/nspanel/client_temp
 else
 mkdir /var/cache/nspanel/client_temp
 fi
 if [[ -e /var/cache/nspanel/uwsgi_temp ]]; then
      rm -rf /var/cache/nspanel/uwsgi_temp
+     mkdir /var/cache/nspanel/uwsgi_temp
 else
 mkdir /var/cache/nspanel/uwsgi_temp
 fi
 if [[ -e /var/cache/nspanel/scgi_temp ]]; then
      rm -rf /var/cache/nspanel/scgi_temp
+     mkdir /var/cache/nspanel/scgi_temp
 else
 mkdir /var/cache/nspanel/scgi_temp
 fi
 if [[ -e /var/cache/nspanel/fastcgi_temp ]]; then
      rm -rf /var/cache/nspanel/fastcgi_temp
+     mkdir /var/cache/nspanel/fastcgi_temp
 else
 mkdir /var/cache/nspanel/fastcgi_temp
 fi
 if [[ -e /var/cache/nspanel/proxy_temp ]]; then
      rm -rf /var/cache/nspanel/proxy_temp
+     mkdir /var/cache/nspanel/proxy_temp
 else
 mkdir /var/cache/nspanel/proxy_temp
 fi
@@ -381,6 +387,7 @@ server {
 EFO
 if [[ -e /etc/ssl/nspanel ]]; then
      rm -rf /etc/ssl/nspanel
+     mkdir /etc/ssl/nspanel
    else
     mkdir /etc/ssl/nspanel
 fi
