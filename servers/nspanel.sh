@@ -334,11 +334,11 @@ server {
 
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
-    location ~ \.php$ {
+    location ~ \.php\$ {
         root           /opt/neoistone/nspanel/htdocs;
         fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
         include        fastcgi_params;
     }
 }
@@ -370,11 +370,11 @@ server {
 
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
-    location ~ \.php$ {
+    location ~ \.php\$ {
         root           /opt/neoistone/nspanel/htdocs;
         fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
         fastcgi_index  index.php;
-        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
         include        fastcgi_params;
     }
 }
@@ -392,7 +392,7 @@ if [[ -e /etc/sysconfig/nspanel ]]; then
      rm -rf /etc/sysconfig/nspanel
 fi
 cat <<EFO>> /etc/sysconfig/nspanel
-# Command line options to use when starting nginx
+# Command line options to use when starting nspanel
 #CLI_OPTIONS=""
 EFO
 cat <<EFO>> /etc/systemd/system/nspanel.service
@@ -407,8 +407,8 @@ Type=forking
 EnvironmentFile=/etc/sysconfig/nspanel
 ExecStartPre=/opt/neoistone/sbin/nspanel -t -c ${dir}/nspanel.conf
 ExecStart=/opt/neoistone/sbin/nspanel -c ${dir}/nspanel.conf
-ExecReload=/bin/kill -s HUP $MAINPID
-ExecStop=/bin/kill -s TERM $MAINPID
+ExecReload=/bin/kill -s HUP \$MAINPID
+ExecStop=/bin/kill -s TERM \$MAINPID
 
 [Install]
 WantedBy=multi-user.target
