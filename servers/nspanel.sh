@@ -17,12 +17,36 @@ else
 fi
 echo "install packages"
 yum install -y zip unzip zlib zlib-devel pcre openssl-devel openssl perl cmake make curl wget apr gcc git tree gcc-c++ openssl-devel bison screen gc gcc++ nano perl-devel perl-ExtUtils-Embed libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel GeoIP GeoIP-devel
-mkdir /var/log/nspanel/
+if [[ -e /var/log/nspanel/ ]]; then
+     rm -rf /var/log/nspanel/
+else 
+  mkdir /var/log/nspanel/
+fi
+if [[ -e /var/cache/nspanel/client_temp ]]; then
+     rm -rf /var/cache/nspanel/client_temp
+else
 mkdir /var/cache/nspanel/client_temp
+fi
+if [[ -e /var/cache/nspanel/uwsgi_temp ]]; then
+     rm -rf /var/cache/nspanel/uwsgi_temp
+else
 mkdir /var/cache/nspanel/uwsgi_temp
+fi
+if [[ -e /var/cache/nspanel/scgi_temp ]]; then
+     rm -rf /var/cache/nspanel/scgi_temp
+else
 mkdir /var/cache/nspanel/scgi_temp
+fi
+if [[ -e /var/cache/nspanel/fastcgi_temp ]]; then
+     rm -rf /var/cache/nspanel/fastcgi_temp
+else
 mkdir /var/cache/nspanel/fastcgi_temp
+fi
+if [[ -e /var/cache/nspanel/proxy_temp ]]; then
+     rm -rf /var/cache/nspanel/proxy_temp
+else
 mkdir /var/cache/nspanel/proxy_temp
+fi
 echo "install nspanel"
 
 ./configure --prefix=${dir} \
@@ -80,7 +104,7 @@ echo "install nspanel"
 make && make install
 echo "unwanted file removing"
 rm ${dir}/koi-utf ${dir}/koi-win ${dir}/win-utf
-rm -rf ${dir}*.default
+rm -rf ${dir}/*.default
 mkdir ${dir}/conf.d
 echo "unwanted file removing"
 rm -rf ${dir}/html
@@ -314,8 +338,8 @@ Wants=network-online.target
 [Service]
 Type=forking
 EnvironmentFile=/etc/sysconfig/nspanel
-ExecStartPre=/opt/neoistone/sbin/nspanel -t -c /etc/neoistone/neoistone.conf
-ExecStart=/opt/neoistone/sbin/nspanel -c /etc/neoistone/neoistone.conf
+ExecStartPre=/opt/neoistone/sbin/nspanel -t -c ${dir}/nspanel.conf
+ExecStart=/opt/neoistone/sbin/nspanel -c ${dir}/nspanel.conf
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 
