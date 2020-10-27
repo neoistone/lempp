@@ -54,21 +54,19 @@ if [[ -e /var/cache/nspanel/proxy_temp ]]; then
 else
 mkdir /var/cache/nspanel/proxy_temp
 fi
-echo "install nspanel"
-
+echo "Install nspanel"
 ./configure --prefix=${dir} \
             --sbin-path=/opt/neoistone/sbin/nspanel \
             --modules-path=${dir}/modules \
             --conf-path=${dir}/nspanel.conf \
             --error-log-path=/var/log/nspanel/error.log \
-            --pid-path=${dir}/nspanel.pid \
+            --pid-path=/opt/neoistone/pid/nspanel.pid \
             --lock-path=/var/run/nspanel.lock \
             --with-pcre \
             --without-http_scgi_module \
             --without-http_uwsgi_module \
             --user=nspanel \
             --group=nspanel \
-            --builddir=nspanel-1.13.2 \
             --with-select_module \
             --with-poll_module \
             --with-threads \
@@ -113,7 +111,7 @@ echo "unwanted file removing"
 rm ${dir}/koi-utf ${dir}/koi-win ${dir}/win-utf
 rm -rf ${dir}/*.default
 mkdir ${dir}/conf.d
-echo "unwanted file removing"
+echo "Auto configure running"
 rm -rf ${dir}/html
 rm -rf ${dir}/nspanel.conf
 rm -rf ${dir}/fastcgi.conf
@@ -224,7 +222,6 @@ openssl dhparam -out ${dir}/dhparam.pem 2048
 cat <<EFO>> ${dir}/nspanel.conf
 #copyright resverd by nginx
 #modify neoistone
-#this nginx webserver but some optimization php reduce the server response
 #nspanel version 0.0.2
 user  nspanel;
 
@@ -244,7 +241,7 @@ http {
     include    proxy.conf;
     include    fastcgi.conf;
     default_type  application/octet-stream;
-    index    index.htm index.html index.php index.php7 home.php home.php7 home.html home.htm home.cgi index.cgi;
+    index    ns.php ns.html ns.htm index.htm index.html index.php index.php7 home.php home.php7 home.html home.htm home.cgi index.cgi;
 
     log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
                       '\$status \$body_bytes_sent "\$http_referer" '
@@ -391,7 +388,9 @@ if [[ -e /etc/ssl/nspanel ]]; then
    else
     mkdir /etc/ssl/nspanel
 fi
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/nspanel/nspanel.key -out /etc/ssl/nspanel/nspanel.crt
+sys_hostname=`hostname`
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/nspanel/nspanel.key -out /etc/ssl/nspanel/nspanel.crt \
+            -subj "/C=IN/ST=NONE/L=NONE/O=NEOISTONE/OU=NONE/CN=${sys_hostnamw}/emailAddress=webmaster@${sys_hostnamw}"
 if [[ -e /etc/systemd/system/nspanel.service ]]; then
   rm -rf /etc/systemd/system/nspanel.service
 fi
