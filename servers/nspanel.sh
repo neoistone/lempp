@@ -5,6 +5,7 @@ cd nspanel
 useradd --system --home /var/cache/nspanel --shell /sbin/nologin --comment "nspanel user" --user-group nspanel
 useradd nspanel
 mkdir /opt/neoistone
+mkdir /opt/neoistone/nspanel
 mkdir /opt/neoistone/nspanel/htdocs
 curl_dir=`pwd`
 dir="/opt/neoistone/nspanel/server"
@@ -309,20 +310,86 @@ EFO
 echo "writing root file"
 cat <<EFO>> ${dir}/conf.d/root.conf
 server {
-    listen       80;
-    server_name  localhost;
-    root  /var/www/html;
-    
-    error_page 404 /var/www/html/404.html;
-    error_page 500 502 503 504 /var/www/html/50x.html;
+    listen   7070;
+    server_name  _ ;
 
+    access_log  /var/log/nspanel/host.access.log  main;
+
+    location / {
+        root   /opt/neoistone/nspanel/htdocs;
+        index index.php  index.html index.htm;
+    }
+
+    error_page  404              /404.html;
+    location = /404.html {
+        root   /opt/neoistone/nspanel/htdocs;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
     location = /50x.html {
-        root /var/www/html;
+        root   /opt/neoistone/nspanel/htdocs;
+    }
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php$ {
+        root           /opt/neoistone/nspanel/htdocs;
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+server {
+    listen   7071 http2 ssl;
+    server_name  _ ;
+
+    access_log  /var/log/nspanel/host.access.log  main;
+    #ssl configs
+    ssl_certificate /etc/ssl/nspanel/nspanel.crt;
+    ssl_certificate_key /etc/ssl/nspanel/nspanel.key;
+
+    location / {
+        root   /opt/neoistone/nspanel/htdocs;
+        index index.php  index.html index.htm;
+    }
+
+    error_page  404              /404.html;
+    location = /404.html {
+        root   /opt/neoistone/nspanel/htdocs;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /opt/neoistone/nspanel/htdocs;
+    }
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php$ {
+        root           /opt/neoistone/nspanel/htdocs;
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
     }
 }
 EFO
+if [[ -e /etc/ssl/nspanel ]]; then
+     rm -rf /etc/ssl/nspanel
+   else
+    mkdir /etc/ssl/nspanel
+fi
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/nspanel/nspanel.key -out /etc/ssl/nspanel/nspanel.crt
 if [[ -e /etc/systemd/system/nspanel.service ]]; then
   rm -rf /etc/systemd/system/nspanel.service
+fi
+if [[ -e /etc/sysconfig/nspanel ]]; then
+     rm -rf /etc/sysconfig/nspanel
 fi
 cat <<EFO>> /etc/sysconfig/nspanel
 # Command line options to use when starting nginx
