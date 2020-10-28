@@ -7,7 +7,8 @@ useradd nspanel
 mkdir /opt/neoistone
 mkdir /opt/neoistone/nspanel
 mkdir /opt/neoistone/nspanel/htdocs
-curl_dir=`pwd`
+curl_dir=`/bin/pwd`
+fqdn=`/bin/hostname`
 dir="/opt/neoistone/nspanel/server"
 #[ -z "${1}" ] && dir="/opt/neoistone/nspanel" || dir=${1}
 if [[ -e ${dir} ]]; then
@@ -121,8 +122,6 @@ echo "writing configure fastcgi file"
 cat <<EFO>> ${dir}/fastcgi.conf
 #copyright resverd by nginx
 #modify neoistone
-#nginx some change do this webserver 
-#nspanel version 0.0.2
 fastcgi_param  SCRIPT_FILENAME    \$document_root\$fastcgi_script_name;
 fastcgi_param  QUERY_STRING       \$query_string;
 fastcgi_param  REQUEST_METHOD     \$request_method;
@@ -203,9 +202,6 @@ EFO
 echo "writing configure proxy file"
 cat <<EFO>> ${dir}/proxy.conf
 #copyright resverd by nginx
-#modify neoistone
-#nginx some change do this webserver 
-#nspanel version 0.0.2
 proxy_redirect          off;
 proxy_set_header        Host            \$host;
 proxy_set_header        X-Real-IP       \$remote_addr;
@@ -219,14 +215,16 @@ proxy_buffers           32 4k;
 EFO
 echo "writing configure file"
 openssl dhparam -out ${dir}/dhparam.pem 2048
+touch /var/log/nspanel/nspanel.pid
+touch /var/log/nspanel/error.log
+touch /var/log/nspanel/access.log
 cat <<EFO>> ${dir}/nspanel.conf
 #copyright resverd by nginx
 #modify neoistone
-#nspanel version 0.0.2
 user  nspanel;
 
-error_log  logs/error.log;
-pid        logs/nspanel.pid;
+error_log  /var/log/nspanel/error.log;
+pid        /var/log/nspanel/nspanel.pid;
 worker_processes auto;
 worker_rlimit_nofile 65535;
 
@@ -247,7 +245,7 @@ http {
                       '\$status \$body_bytes_sent "\$http_referer" '
                       '"\$http_user_agent" "\$http_x_forwarded_for"';
    
-    access_log  logs/access.log  main;
+    access_log  /var/log/nspanel/access.log  main;
 
     charset     utf-8;
     sendfile    on;
@@ -314,7 +312,7 @@ echo "writing root file"
 cat <<EFO>> ${dir}/conf.d/root.conf
 server {
     listen   7070;
-    server_name  _ ;
+    server_name  ${fqdn};
 
     access_log  /var/log/nspanel/host.access.log  main;
 
