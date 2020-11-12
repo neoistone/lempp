@@ -31,7 +31,7 @@
 # Description:  Install LAMP(Linux + pache + PHP + MySQL/MariaDB/ + Email Server + NSVRITUAL contorl panel )
 # Website:  https://www.neoistone.com
 # Github:   https://github.com/neoistone/nspanel
-
+curl_dir=`pwd`
 clear
 echo "|--------------------------------------------------------------------|"
 echo "|       _  __ ____ ____   ____ ____ ______ ____   _  __ ____ NSPANEL |"
@@ -64,3 +64,4 @@ kill -9 nspanel
 userdel nspanel
 yum -y update
 yum clean all
+rm -rf ${curl_dir}/uninstall-nspanel.sh
