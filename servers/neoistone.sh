@@ -4,8 +4,8 @@ tar xvf neoistone.tar.gz
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
 useradd neoistone
-dir="/usr/local/neoistone"
-[ -z "${1}" ] && dir="/usr/local/neoistone" || dir=${1}
+dir="/etc/neoistone"
+[ -z "${1}" ] && dir="/etc/neoistone" || dir=${1}
 if [[ -e ${dir} ]]; then
     echo "Already install in this server start service or uninstall webserver"
     break;
