@@ -47,13 +47,7 @@ read -e -p "Would you like to continue (y/n)? " yn
         [Nn]* ) exit;
     esac
 done
-yum remove -y pdns pdns-backend-mysql zip unzip zlib zlib-devel pcre  pecl openssl-devel openssl perl cmake make curl wget apr gcc git tree  gcc-c++  openssl-devel  bison  screen  gc  gcc++  gcc  pecl-devel pcre-devel socat epel-release nano pcre-devel libtool vim html2text sed gawk ntp firewalld mod_ssl
-yum remove -y php-*
-yum remove -y php*
-yum remove  -y MariaDB-server MariaDB-client
 
-neoistone_location=`/var/lib/neoistone`
-rm -rf /var/lib/neoistone
 rm -rf /var/neoistone/ 
 rm -rf ${neoistone_location}
 rm -rf /var/log/neoistone/
@@ -61,13 +55,5 @@ rm -rf /bin/neoistone
 rm -rf /etc/systemd/system/neoistone.service
 rm -rf /etc/sysconfig/neoistone
 rm -rf /tmp/*
-rm -rf /var/lib/mysql /var/lib/mysql.bak
-rm -rf /etc/my.cnf /etc/my.cnf.bak
-
-rm -f /var/log/mariadb
-rm -f /var/log/mariadb/mariadb.log.rpmsave
-rm -rf /var/lib/mysql
-rm -rf /usr/lib64/mysql
-rm -rf /usr/share/mysql
 
 yum -y update
