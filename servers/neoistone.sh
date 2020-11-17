@@ -12,6 +12,7 @@ if [[ -e ${dir} ]]; then
 else
     mkdir ${dir}
 fi
+yum install -y nano zip unzip git wget curl perl make make apr gcc openssl git tree gcc-c++ openssl-devel bison net-tools pcre-devel libtool zlib zlib-devel
 echo "install neoistone"
 ./configure   --user=neoistone --group=neoistone\
               --prefix=${dir}\
