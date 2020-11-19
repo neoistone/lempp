@@ -279,6 +279,7 @@ sys_hostname=`hostname`
 mkdir /etc/ssl/neoistone
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/neoistone/neoistone.key -out /etc/ssl/neoistone/neoistone.crt \
             -subj "/C=IN/ST=NONE/L=NONE/O=NEOISTONE/OU=NONE/CN=${sys_hostnamw}/emailAddress=webmaster@${sys_hostnamw}"
+mkdir ${dir}/conf.d/
 cat <<EFO>> ${dir}/conf.d/root.conf
 server {
     listen       80;
