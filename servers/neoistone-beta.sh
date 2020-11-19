@@ -275,12 +275,18 @@ http {
 }
 EFO
 echo "writing root file"
+sys_hostname=`hostname`
+mkdir /etc/ssl/neoistone
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/neoistone/neoistone.key -out /etc/ssl/neoistone/neoistone.crt \
+            -subj "/C=IN/ST=NONE/L=NONE/O=NEOISTONE/OU=NONE/CN=${sys_hostnamw}/emailAddress=webmaster@${sys_hostnamw}"
 cat <<EFO>> ${dir}/conf.d/root.conf
 server {
     listen       80;
     server_name  localhost;
     root  /var/www/html;
     
+    index index.php  index.html index.htm neoistone.php;
+
     error_page 404 /var/www/html/404.html;
     error_page 500 502 503 504 /var/www/html/50x.html;
 
@@ -288,6 +294,41 @@ server {
         root /var/www/html;
     }
 }
+server {
+    listen   443 http2 ssl;
+    server_name  _ ;
+
+    access_log  /var/log/neoistone/host.access.log  main;
+    #ssl configs
+    ssl_certificate /etc/ssl/nspanel/nspanel.crt;
+    ssl_certificate_key /etc/ssl/nspanel/nspanel.key;
+
+    location / {
+        root   /var/www/html;
+        index index.php  index.html index.htm neoistone.php;
+    }
+
+    error_page  404              /404.html;
+    location = /404.html {
+        root   /var/www/html;
+    }
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /var/www/html;
+    }
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~ \.php\$ {
+        root           /var/www/html;
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
+        include        fastcgi_params;
+    }
 EFO
 mkdir /var/www
 mkdir /var/www/html/
