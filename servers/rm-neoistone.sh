@@ -47,7 +47,7 @@ read -e -p "Would you like to continue (y/n)? " yn
         [Nn]* ) exit;
     esac
 done
-
+neoistone_location=`/opt/var`
 rm -rf /var/neoistone/ 
 rm -rf ${neoistone_location}
 rm -rf /var/log/neoistone/
