@@ -19,6 +19,7 @@ mkdir ${dir}
 mkdir ${dir}/modules
 mkdir /etc/ssl/neoistone
 mkdir /etc/ssl/nspanel
+mkdir /etc/neoistone/logs
 echo "install neoistone"
 ./configure --prefix=${dir} \
             --sbin-path=/bin/neoistone \
