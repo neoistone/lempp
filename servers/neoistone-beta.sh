@@ -17,6 +17,8 @@ mkdir /opt/neoistone
 mkdir /opt/neoistone/pid/
 mkdir ${dir}
 mkdir ${dir}/modules
+mkdir /etc/ssl/neoistone
+mkdir /etc/ssl/nspanel
 echo "install neoistone"
 ./configure --prefix=${dir} \
             --sbin-path=/bin/neoistone \
@@ -330,6 +332,7 @@ server {
         fastcgi_param  SCRIPT_FILENAME  \$document_root\$fastcgi_script_name;
         include        fastcgi_params;
     }
+}
 EFO
 mkdir /var/www
 mkdir /var/www/html/
