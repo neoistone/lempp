@@ -1,6 +1,6 @@
 runpath=`pwd`
-wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone.tar.gz
-tar xvf neoistone.tar.gz
+wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone.zip
+unzip neoistone.zip
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
 useradd neoistone
