@@ -48,6 +48,8 @@ read -e -p "Would you like to continue (y/n)? " yn
     esac
 done
 neoistone_location=`/opt/var`
+systemctl stop neoistone
+systemctl disable neoistone
 rm -rf /var/neoistone/ 
 rm -rf ${neoistone_location}
 rm -rf /var/log/neoistone/
