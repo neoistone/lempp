@@ -1,6 +1,6 @@
 runpath=`pwd`
-wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone.zip
-unzip neoistone.zip
+wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone2.zip
+unzip neoistone2.zip
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
 useradd neoistone
@@ -358,5 +358,5 @@ firewall-cmd --reload
 systemctl restart neoistone
 systemctl enable neoistone
 rm -rf ${runpath}/neoistone 
-rm -rf ${runpath}/neoistone.sh
-rm -rf ${runpath}/neoistone.tar.gz
+rm -rf ${runpath}/neoistone-beta2.sh
+rm -rf ${runpath}/neoistone2.zip
