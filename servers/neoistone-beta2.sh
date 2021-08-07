@@ -12,7 +12,8 @@ if [[ -e ${dir} ]]; then
 else
     mkdir ${dir}
 fi
-yum install epel-release zip unzip zlib zlib-devel pcre openssl-devel openssl perl cmake make curl wget apr gcc git tree gcc-c++ bison screen gc gcc++ nano perl-devel perl-ExtUtils-Embed libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel GeoIP GeoIP-devel pcre-devel autoconf libtool re2c bzip2-devel libcurl-devel libpng-devel libicu-devel libmcrypt-devel libwebp-devel libjpeg-devel libldb-devel oniguruma.x86_64 oniguruma-devel.x86_64 -y
+yum install -y epel-release
+yum install zip unzip zlib zlib-devel pcre openssl-devel openssl perl cmake make curl wget apr gcc git tree gcc-c++ bison screen gc gcc++ nano perl-devel perl-ExtUtils-Embed libxslt libxslt-devel libxml2 libxml2-devel gd gd-devel GeoIP GeoIP-devel pcre-devel autoconf libtool re2c bzip2-devel libcurl-devel libpng-devel libicu-devel libmcrypt-devel libwebp-devel libjpeg-devel libldb-devel oniguruma.x86_64 oniguruma-devel.x86_64 -y
 mkdir /opt/neoistone
 mkdir /opt/neoistone/pid/
 mkdir ${dir}
