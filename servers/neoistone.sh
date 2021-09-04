@@ -359,5 +359,6 @@ firewall-cmd --reload
 systemctl restart neoistone
 systemctl enable neoistone
 rm -rf ${runpath}/neoistone 
-rm -rf ${runpath}/neoistone-beta2.sh
+rm -rf ${runpath}/neoistone.sh
 rm -rf ${runpath}/neoistone.zip
+rm -rf ${runpath}/__MACOSX
