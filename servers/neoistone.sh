@@ -1,6 +1,6 @@
 runpath=`pwd`
-wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/latest.zip
-unzip latest.zip
+wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/latest-http2.zip
+unzip latest-http2.zip
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
 useradd neoistone
@@ -361,5 +361,5 @@ systemctl restart neoistone
 systemctl enable neoistone
 rm -rf ${runpath}/neoistone 
 rm -rf ${runpath}/neoistone.sh
-rm -rf ${runpath}/latest.zip
+rm -rf ${runpath}/latest-http2.zip
 rm -rf ${runpath}/__MACOSX
