@@ -58,4 +58,7 @@ rm -rf /etc/systemd/system/neoistone.service
 rm -rf /etc/sysconfig/neoistone
 rm -rf /tmp/*
 
+userdel neoistone
+groupdel neoistone
 yum -y update
+
