@@ -1,6 +1,6 @@
 runpath=`pwd`
-wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/latest-http2.zip
-unzip latest-http2.zip
+wget https://raw.githubusercontent.com/neoistone/lempp/main/servers/neoistone-http2.zip
+unzip neoistone-http2.zip
 cd neoistone
 useradd --system --home /var/cache/neoistone --shell /sbin/nologin --comment "neoistone user" --user-group neoistone
 useradd neoistone
