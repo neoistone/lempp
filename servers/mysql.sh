@@ -1,50 +1,115 @@
-password=${1}
-path=${2}
-os_type=${3}
-mysql_install(){
-cat <<EFO>>/opt/neoistone/mysql_password
-${password}
-EFO
-DB_Root_Password=`sh /opt/neoistone/mysql_password`
-if [[ "${os_type}" == "centos7" ]]; then
-cat <<EFO>>/etc/yum.repos.d/mariadb.repo
-[mariadb]
-name = MariaDB
-baseurl = http://yum.mariadb.org/10.1/${os_type}-amd64
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-EFO
- elif [[ "${os_type}" == "rhel7" ]]; then
-cat <<EFO>>/etc/yum.repos.d/mariadb.repo
-[mariadb]
-name = MariaDB
-baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-EFO
- elif [[ "${os_type}" == "rhel8" ]]; then
-cat <<EFO>>/etc/yum.repos.d/mariadb.repo
-[mariadb]
-name = MariaDB
-baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-EFO
- elif [[ "${os_type}" == "centos8" ]]; then
-cat <<EFO>>/etc/yum.repos.d/mariadb.repo
-[mariadb]
-name = MariaDB
-baseurl = http://yum.mariadb.org/10.5/${os_type}-amd64
-gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
-gpgcheck=1
-EFO
+#!/bin/bash
+ 
+echo "Installing and configiring mariadb..."
+
+rhel=`rpm -qa | grep redhat-release`
+centos=`rpm --query centos-release`
+
+server_ip=`curl cpanel.net/showip.cgi`
+
+# First we check if the user is 'root' before allowing installation to commence
+if [ "$UID" == "0" ]; then
+     break;
+else 
+    _error "Installed failed! To install you must be logged in as 'root', please try again"
+   exit 1
 fi
+
+_red(){
+    printf '\033[1;31;31m%b\033[0m' "$1"
+    printf "\n"
+}
+
+_green(){
+    printf '\033[1;31;32m%b\033[0m' "$1"
+}
+
+_yellow(){
+    printf '\033[1;31;33m%b\033[0m' "$1"
+    printf "\n"
+}
+
+_printargs(){
+    printf -- "%s" "$1"
+    printf "\n"
+}
+
+_info(){
+    _printargs "$@"
+}
+
+_error(){
+    _red "$1"
+    exit 
+}
+
+if [ "${rhel}" == "" ]; then
+     if [ "${centos}" == "" ]; then
+          echo "Nspanel support only centos 7 or rhel 7"
+          exit;
+      else
+        os_version=`cat /etc/centos-release | tr -dc '0-9.'| cut -d \. -f1`
+        os_name="centos"
+     fi
+ else
+   os_version=`cat /etc/redhat-release | tr -dc '0-9.'| cut -d \. -f1` 
+   os_name="readhat"
+fi
+
+if [ -e /opt/neoistone/mysql ] || [ -e /var/lib/mysql ] || [ -e /etc/my.cnf ] || [ -e /bin/mysql ] || [ -e /sbin/mysql ] || [ -e /usr/bin/mysql ]; then
+       _error "mysql already install "
+fi
+
+if [ -e /etc/yum.repos.d/mariadb.repo ]; then
+     rm -rf /etc/yum.repos.d/mariadb.repo
+fi
+
+if [ ! -e /opt/neoistone ]; then
+     mkdir /opt/neoistone
+fi
+
+if [ -e /opt/sneoistone ]; then
+     rm -rf /opt/sneoistone
+fi
+
+if [ ! -e /opt/neoistone/logs ]; then
+    mkdir /opt/neoistone/logs
+fi
+
+
+MariaDB_Data_Dir="/opt/neoistone/"
+cat <<EFO>>/etc/yum.repos.d/mariadb.repo
+[mariadb]
+name = Neoistone Data MariaDB
+baseurl = http://yum.mariadb.org/10.5/${os_name}${os_version}-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+EFO
+
+yum clean all 
+yum -y update 
+yum install -y python3
+
+if [ "${1}" == "" ]; then
+        while true; do
+           read -e -p "Enter your Mysql Root Password : " mysqlpwd
+           if [ "${mysqlpwd}" == "" ]; then
+                   exit;
+                else 
+                 break;
+           fi
+        done
+else 
+        mysqlpwd=${1}
+fi
+
 yum install  -y MariaDB-server MariaDB-client
-mysqld --print-defaults
-systemctl start mariadb
-systemctl enable mariadb
+sudo systemctl start mariadb
+
+echo "${mysqlpwd}" >> /opt/sneoistone
+chmod +x /opt/sneoistone
 mysql -uroot <<MYSQL_SCRIPT
-UPDATE mysql.user SET Password=PASSWORD('${DB_Root_Password}') WHERE User='root';
+UPDATE mysql.user SET Password=PASSWORD('${mysqlpwd}') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');
 DROP DATABASE IF EXISTS test;
@@ -52,22 +117,24 @@ DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';
 FLUSH PRIVILEGES;
 MYSQL_SCRIPT
 systemctl stop mariadb
+
 rsync -av /var/lib/mysql ${MariaDB_Data_Dir}
-mv /var/lib/mysql /var/lib/mysql.bak
-cp /etc/my.cnf /etc/my.cnf.bak
-echo <<EFO>>/etc/my.cnf
+
+mv /etc/my.cnf /opt/neoistone/my.cnf.bak
+
+cat <<EFO>> /etc/my.cnf
 #generated neoistone
 [client]
-port		= 3306
-socket		= ${MariaDB_Data_Dir}/mysql/mysql.sock
+port            = 3306
+socket          = ${MariaDB_Data_Dir}mysql/mysql.sock
 
 [mysqld]
-port		= 3306
-socket		= ${MariaDB_Data_Dir}/mysql/mysql.sock
+port            = 3306
+socket          = ${MariaDB_Data_Dir}mysql/mysql.sock
 user    = mysql
-#bind-address = 0.0.0.0
-datadir = ${MariaDB_Data_Dir}
-log_error = ${neoistone}/logs/mariadb.err
+bind-address = ${server_ip}
+datadir = ${MariaDB_Data_Dir}mysql
+log_error = /opt/neoistone/logs/mariadb.log
 
 skip-external-locking
 key_buffer_size = 16M
@@ -89,27 +156,15 @@ open_files_limit = 65535
 
 log-bin=mysql-bin
 binlog_format=mixed
-server-id	= 1
+server-id       = 1
 expire_logs_days = 10
 
-default_storage_engine = InnoDB
-innodb_file_per_table = 1
-innodb_data_home_dir = ${MariaDB_Data_Dir}
-innodb_data_file_path = ibdata1:10M:autoextend
-innodb_log_group_home_dir = ${MariaDB_Data_Dir}
-innodb_buffer_pool_size = 16M
-innodb_additional_mem_pool_size = 2M
-innodb_log_file_size = 5M
-innodb_log_buffer_size = 8M
-innodb_flush_log_at_trx_commit = 1
-innodb_lock_wait_timeout = 50
+default_storage_engine = MyISAM
 
 [mysqldump]
 quick
 max_allowed_packet = 16M
 
-[mysql]
-no-auto-rehash
 
 [myisamchk]
 key_buffer_size = 20M
@@ -119,16 +174,21 @@ write_buffer = 2M
 
 [mysqlhotcopy]
 interactive-timeout
-
-[mariadb]
-aria-encrypt-tables
-encrypt-binlog
-encrypt-tmp-disk-tables
-encrypt-tmp-files
-loose-innodb-encrypt-log
-loose-innodb-encrypt-tables
 EFO
+
+touch /opt/neoistone/logs/mariadb.log
+firewall-cmd --zone=public --permanent --add-port=3306/tcp.
+
 systemctl start mariadb
 systemctl enable mariadb
-}
-mysql_install
+clear
+echo "-------------------------------------------------------------------------"
+echo "|   Save Credentials Secure Place AND Don't Forgot can not share any one "
+echo "|                                                                        "
+echo "|   Mysql Root usernname  : root                                         "
+echo "|   Mysql Root PASSWORD   : ${mysqlpwd}                                  "
+echo "|   Mysql Port            : 3306                                         "
+echo "|                                                                        "
+echo "|   Thank Install Mariadb Powered by neoistone                           "
+echo "|                                                                        "
+echo "-------------------------------------------------------------------------"
