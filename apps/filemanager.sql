@@ -17,17 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `panel`
---
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Table structure for table `filemanager_users`
 --
 
-CREATE TABLE `users` (
+CREATE TABLE `filemanager_users` (
   `id` int(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `passsword` text NOT NULL,
@@ -37,10 +33,10 @@ CREATE TABLE `users` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `filemanager_users`
 --
 
-INSERT INTO `users` (`id`, `username`, `passsword`, `home_dir`, `status`, `domain`) VALUES
+INSERT INTO `filemanager_users` (`id`, `username`, `passsword`, `home_dir`, `status`, `domain`) VALUES
 (1, 'neoistone', 'b5cc3a21a6e91f69ee96b7fe07d0320313e6b8a5', '/var/www/neoistone', 'active', 'neoistone.com'),
 (2, 'hostingaro', 'b5cc3a21a6e91f69ee96b7fe07d0320313e6b8a5', '/var/www/hostingaro', 'active', 'hostingaro.com'),
 (3, 'avd', 'b5cc3a21a6e91f69ee96b7fe07d0320313e6b8a5', '/var/www/avd', 'active', 'avdsecuritysolutions.com'),
@@ -52,9 +48,9 @@ INSERT INTO `users` (`id`, `username`, `passsword`, `home_dir`, `status`, `domai
 --
 
 --
--- Indexes for table `users`
+-- Indexes for table `filemanager_users`
 --
-ALTER TABLE `users`
+ALTER TABLE `filemanager_users`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -62,9 +58,9 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT for table `filemanager_users`
 --
-ALTER TABLE `users`
+ALTER TABLE `filemanager_users`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
