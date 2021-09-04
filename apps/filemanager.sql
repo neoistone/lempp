@@ -1,11 +1,10 @@
--- phpMyAdmin SQL Dump
--- version 5.1.1
--- https://www.phpmyadmin.net/
+-- Neoistone SQL Dump
+-- version 2.1.1
+-- https://nspanel.neoistone.com/
 --
 -- Host: localhost
 -- Generation Time: Sep 04, 2021 at 03:52 PM
 -- Server version: 10.3.31-MariaDB
--- PHP Version: 7.4.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
