@@ -40,7 +40,6 @@ echo "install neoistone"
             --with-file-aio \
             --with-http_ssl_module \
             --with-http_v2_module \
-            --with-http_v3_module \
             --with-http_realip_module \
             --with-http_addition_module \
             --with-http_xslt_module=dynamic \
@@ -77,7 +76,7 @@ echo "install neoistone"
 make && make install
 mkdir /var/cache/neoistone/ /var/log/neoistone/ /var/cache/neoistone/uwsgi_temp /var/cache/neoistone/fastcgi_temp /var/cache/neoistone/scgi_temp
 echo "unwanted file removing"
-rm -rf ${dir}/nginx.conf.default ${dir}/mime.types.default ${dir}/uwsgi_params.default ${dir}/scgi_params.default ${dir}/fastcgi_params.default ${dir}/fastcgi.conf.default
+rm -rf ${dir}/neoistone.conf.default ${dir}/mime.types.default ${dir}/uwsgi_params.default ${dir}/scgi_params.default ${dir}/fastcgi_params.default ${dir}/fastcgi.conf.default
 
 chmod +x /bin/neoistone
 echo "unwanted file removing"
@@ -105,7 +104,7 @@ fastcgi_param  DOCUMENT_URI       \$document_uri;
 fastcgi_param  DOCUMENT_ROOT      \$document_root;
 fastcgi_param  SERVER_PROTOCOL    \$server_protocol;
 fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
-fastcgi_param  SERVER_SOFTWARE    nginx/\$nginx_version;
+fastcgi_param  SERVER_SOFTWARE    neoistone;
 fastcgi_param  REMOTE_ADDR        \$remote_addr;
 fastcgi_param  REMOTE_PORT        \$remote_port;
 fastcgi_param  SERVER_ADDR        \$server_addr;
@@ -361,5 +360,5 @@ systemctl restart neoistone
 systemctl enable neoistone
 rm -rf ${runpath}/neoistone 
 rm -rf ${runpath}/neoistone.sh
-rm -rf ${runpath}/latest-http2.zip
+rm -rf ${runpath}/neoistone-http2.zip
 rm -rf ${runpath}/__MACOSX
